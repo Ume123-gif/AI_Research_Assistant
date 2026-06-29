@@ -1,4 +1,6 @@
+from tools.search_tool import search
 def generate_report(topic, level):
+    search_result = search(topic)
     report = f"""# {topic}
 
 ## Overview
