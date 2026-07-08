@@ -1,32 +1,7 @@
-from tools.search_tool import search
-from llm.provider import generate_with_gemini
-def generate_report(topic, level):
-    if level == "Short":
-        words = "500-700 words"
-    elif level == "Medium":
-        words = "1200-1500 words"
-    else:
-        words = "2500-3000 words"
-    search_result = search(topic)
-    context = ""
-    for i, result in enumerate(search_result, start=1):
-        context += f"""
-        Source: {i}
-
-        Title: 
-        {result["title"]}
-
-        Summary: 
-        {result["content"]}
-
-        URL: 
-        {result["url"]}
-        __________________________________________________________________________________________
-    """
-    prompt = build_prompt(topic, words, context)
-    f"""
+def build_prompt(topic, context, words):
+    return f"""
     You are an expert research assistant.
-    Using ONLY the information provided below, generate a well-structured Markdown report.
+    Using ONLY the research material provided below, generate a well-structured Markdown report.
 
     Instructions:
     - Write a professional report.
@@ -34,8 +9,8 @@ def generate_report(topic, level):
     - Explain concepts clearly.
     - Include recent developments.
     - Use bullet points where appropriate.
-    - If the provided information is insufficient for a section, explicitly state that reliable information was not available instead of making assumptions.
-    - Do NOT use information outside the provided sources.
+    - If the provided research material is insufficient for a section, explicitly state that reliable information was not available instead of making assumptions.
+    - Do NOT use any information outside the provided sources.
     - Do NOT include raw URLs inside the report body.
     - Make the report suitable for students and professionals.
     - Prefer information from
@@ -71,8 +46,5 @@ def generate_report(topic, level):
 
     Topic: {topic}
     Report Length: {words}
-    Information: {context}
+    Research Material: {context}
     """
-    
-    report = generate_text(prompt)
-    return report, search_result

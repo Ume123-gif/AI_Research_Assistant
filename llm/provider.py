@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 from google import genai
 load_dotenv()
-def generate_with_gemini(prompt):
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+def generate_text(prompt):
     report = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt
